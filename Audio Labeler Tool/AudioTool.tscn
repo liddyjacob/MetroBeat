@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://bswdt37cao7km"]
+
+[ext_resource type="AudioStream" uid="uid://7ee0d7qwvm17" path="res://JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU/JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU - 11 either on or off the drugs.mp3" id="1_3n7bg"]
+[ext_resource type="Script" path="res://Scripts/Progress.gd" id="2_4u6df"]
+
+[node name="AudioTool" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("1_3n7bg")
+autoplay = true
+
+[node name="WaveForm" type="ColorRect" parent="MusicPlayer"]
+offset_left = 65.0
+offset_top = 565.0
+offset_right = 1113.0
+offset_bottom = 605.0
+
+[node name="ProgressBackground" type="ColorRect" parent="MusicPlayer/WaveForm"]
+offset_top = 39.0
+offset_right = 1048.0
+offset_bottom = 48.0
+color = Color(0, 0, 0, 1)
+
+[node name="Progress" type="ColorRect" parent="MusicPlayer/WaveForm"]
+offset_top = 39.0
+offset_bottom = 48.0
+color = Color(0.384314, 0.733333, 1, 1)
+script = ExtResource("2_4u6df")
