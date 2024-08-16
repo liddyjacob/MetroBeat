@@ -10,4 +10,4 @@ func _ready():
 func _process(delta):
 	var music_player = get_parent().get_parent()
 	var playback_position = music_player.get_playback_position() / music_player.stream.get_length()
-	size.x = playback_position * get_parent().size.x
+	size.x = playback_position * get_parent().get_child(0).size.x
