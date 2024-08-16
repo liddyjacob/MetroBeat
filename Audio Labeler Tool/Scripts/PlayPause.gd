@@ -1,5 +1,6 @@
-extends Area2D
+extends Control
 
+var continue_from = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,7 +12,8 @@ func _process(delta):
 	pass
 
 
-func _on_input_event(viewport, event, shape_idx):
+func _on_texture_button_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
-	# Handle the selection of this matrix tile
-		print("Button pressed")
+		# Get audio player
+		var audio_tool = get_node("/root/AudioTool")
+		audio_tool.toggle_playback()

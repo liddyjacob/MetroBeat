@@ -8,6 +8,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var music_player = get_parent().get_parent()
-	var playback_position = music_player.get_playback_position() / music_player.stream.get_length()
-	size.x = playback_position * get_parent().get_child(0).size.x
+	var audio_tool = get_node("/root/AudioTool")
+
+	size.x = audio_tool.rel_position * get_parent().size.x

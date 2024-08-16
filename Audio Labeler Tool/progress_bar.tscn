@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://cklc8u1chvdes"]
+
+[ext_resource type="Script" path="res://Scripts/progress_bar.gd" id="1_6o1ey"]
+[ext_resource type="Script" path="res://Scripts/Progress.gd" id="2_muoyf"]
+
+[node name="ProgressBar" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1000.0
+offset_bottom = 14.0
+script = ExtResource("1_6o1ey")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1000.0
+offset_bottom = 14.0
+color = Color(0.205117, 0.205117, 0.205117, 1)
+
+[node name="Progress" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 14.0
+color = Color(0.027451, 0.184314, 0.388235, 1)
+script = ExtResource("2_muoyf")
+
+[connection signal="gui_input" from="Background" to="." method="_on_background_gui_input"]
+[connection signal="gui_input" from="Progress" to="." method="_on_progress_gui_input"]

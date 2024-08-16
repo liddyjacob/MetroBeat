@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://0hgyip1on0pg"]
+
+[ext_resource type="Script" path="res://Scripts/PlayPause.gd" id="1_tu4yi"]
+[ext_resource type="Texture2D" uid="uid://dat6rvg6red7d" path="res://Textures/pause-play-button.png" id="2_04a51"]
+
+[node name="PlayPause" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 198.0
+offset_bottom = 194.0
+script = ExtResource("1_tu4yi")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 66.0
+offset_bottom = 67.0
+texture_normal = ExtResource("2_04a51")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="gui_input" from="TextureButton" to="." method="_on_texture_button_gui_input"]
