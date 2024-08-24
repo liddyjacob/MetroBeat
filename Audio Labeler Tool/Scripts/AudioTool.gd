@@ -10,6 +10,8 @@ var sounds_dict = {}
 var audio_stream = get_node("MusicPlayer")
 @onready 
 var selector = $select_file
+@onready
+var waveform = $WaveForm
 
 
 # Set playback position, and seek if active
@@ -35,13 +37,17 @@ func toggle_playback():
 
 # Set a new stream based off audio file
 func restart():
-	set_playback_to(0)
 	audio_stream.stream = sounds_dict[audio_file]
-	
+	set_playback_to(0)
 
 # Get the name of an audio file, then open it
 func open_audio(audio_id):
 	audio_file = sounds_array[audio_id]
+	var err_id = OS.execute('bash', ['audio_scripts/make_waveform_png.sh', 'music/' + audio_file])
+	if err_id == 0:
+		print("Waveform sucessfully created")
+	else:
+		print("Error encountered loading audio")
 	# Open a selected audio file
 	restart()
 
@@ -69,10 +75,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if audio_stream.has_stream_playback():
-		playback_position = audio_stream.get_playback_position()
-	rel_position = playback_position / audio_stream.stream.get_length()
-	pass
+	if audio_stream.stream:
+		if audio_stream.has_stream_playback():
+			playback_position = audio_stream.get_playback_position()
+		rel_position = playback_position / audio_stream.stream.get_length()
+
 
 
 func _on_music_player_finished():
