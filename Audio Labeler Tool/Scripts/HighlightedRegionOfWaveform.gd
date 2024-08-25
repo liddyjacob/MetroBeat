@@ -1,5 +1,7 @@
 extends Camera2D
 
+@onready
+var audio_tool = get_node("/root/AudioTool")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -8,5 +10,5 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	offset.x = offset.x + 1 
+	offset.x = audio_tool.rel_position * 10000
 	pass

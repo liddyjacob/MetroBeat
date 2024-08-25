@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://bswdt37cao7km"]
+[gd_scene load_steps=8 format=3 uid="uid://bswdt37cao7km"]
 
 [ext_resource type="Script" path="res://Scripts/AudioTool.gd" id="1_ku2tb"]
 [ext_resource type="PackedScene" uid="uid://0hgyip1on0pg" path="res://play_pause.tscn" id="2_m00vf"]
 [ext_resource type="PackedScene" uid="uid://cklc8u1chvdes" path="res://progress_bar.tscn" id="2_yu2ge"]
 [ext_resource type="PackedScene" uid="uid://dfokk1io5qoar" path="res://wave_form.tscn" id="4_3acmf"]
 [ext_resource type="PackedScene" uid="uid://bg4syiviv0sk6" path="res://select_file.tscn" id="4_hpwip"]
+[ext_resource type="PackedScene" uid="uid://crh4rslbjt80n" path="res://camera_over_wave.tscn" id="6_fgd1b"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_72755"]
+viewport_path = NodePath("SubViewport")
 
 [node name="AudioTool" type="Node2D"]
 script = ExtResource("1_ku2tb")
@@ -35,5 +39,38 @@ offset_bottom = 685.0
 
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
 autoplay = true
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+
+[node name="CameraOverWave" parent="SubViewport" instance=ExtResource("6_fgd1b")]
+
+[node name="WaveZoom" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1000.0
+offset_top = 351.0
+offset_right = 1400.0
+offset_bottom = 573.0
+
+[node name="ColorRect" type="ColorRect" parent="WaveZoom"]
+layout_mode = 0
+offset_right = 403.0
+offset_bottom = 223.0
+
+[node name="TextureRect" type="TextureRect" parent="WaveZoom"]
+layout_mode = 0
+offset_right = 402.0
+offset_bottom = 219.0
+texture = SubResource("ViewportTexture_72755")
+expand_mode = 1
+
+[node name="Polygon2D2" type="Polygon2D" parent="WaveZoom"]
+position = Vector2(120, -352)
+polygon = PackedVector2Array(98, 345, 78, 279, 120, 279)
+
+[node name="Polygon2D" type="Polygon2D" parent="WaveZoom"]
+position = Vector2(120, 11)
+polygon = PackedVector2Array(99, 213, 80, 279, 120, 279)
 
 [connection signal="finished" from="MusicPlayer" to="." method="_on_music_player_finished"]
