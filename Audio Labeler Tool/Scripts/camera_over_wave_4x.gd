@@ -1,14 +1,13 @@
-extends Camera2D
+extends Node2D
 
-@onready
-var audio_tool = get_node("/root/AudioTool")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	get_node("HighlightedRegionOfWaveform").zoom.x = 4
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	offset.x = audio_tool.rel_position * 20000
+func _process(delta):
 	pass

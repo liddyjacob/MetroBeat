@@ -12,7 +12,12 @@ var audio_stream = get_node("MusicPlayer")
 var selector = $select_file
 @onready
 var waveform = $WaveForm
-
+@onready
+var CameraForZoomWave = $WaveForm/SubViewport/Camera2D
+@onready
+var CameraForWave = $SubViewport/CameraOverWave
+@onready
+var CameraForZoom4xWave = $SubViewport4x/CameraOverWave
 
 # Set playback position, and seek if active
 func set_playback_to(rel_position):
@@ -40,6 +45,13 @@ func restart():
 	audio_stream.stream = sounds_dict[audio_file]
 	set_playback_to(0)
 
+func rebuild_waveform():
+	var new_wave_img = Image.load_from_file("res://waveform.png")
+	var img_texture = ImageTexture.create_from_image(new_wave_img)
+	CameraForZoomWave.get_node('pure_wave').get_node('TextureRect').texture = img_texture
+	CameraForWave.get_node('pure_wave').get_node('TextureRect').texture = img_texture
+	CameraForZoom4xWave.get_node('pure_wave').get_node('TextureRect').texture = img_texture
+
 # Get the name of an audio file, then open it
 func open_audio(audio_id):
 	audio_file = sounds_array[audio_id]
@@ -49,6 +61,7 @@ func open_audio(audio_id):
 	else:
 		print("Error encountered loading audio")
 	# Open a selected audio file
+	rebuild_waveform()
 	restart()
 
 # Called when the node enters the scene tree for the first time.
@@ -71,6 +84,7 @@ func _ready():
 	sounds_array.sort()
 	dir.list_dir_end()
 	selector.add_items() # Replace with function body.
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

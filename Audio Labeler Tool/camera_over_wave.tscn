@@ -7,7 +7,6 @@
 
 [node name="HighlightedRegionOfWaveform" type="Camera2D" parent="."]
 position = Vector2(0, 450)
-zoom = Vector2(2, 1)
 script = ExtResource("1_kog0m")
 
 [node name="pure_wave" parent="." instance=ExtResource("1_m8b1m")]
