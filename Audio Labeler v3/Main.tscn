@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://nt1ehe3u2owa"]
+
+[ext_resource type="PackedScene" uid="uid://bnif78if5uie3" path="res://progress.tscn" id="1_5ejbc"]
+[ext_resource type="Script" path="res://gdscripts/Master Audio Tool.gd" id="1_gfesw"]
+[ext_resource type="PackedScene" uid="uid://c0sv804snqhf4" path="res://close_up.tscn" id="3_w24g4"]
+[ext_resource type="AudioStream" uid="uid://cwjw47x7t312e" path="res://music/JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU - 11 either on or off the drugs.ogg" id="4_pirqm"]
+[ext_resource type="PackedScene" uid="uid://cpfglly6xkhct" path="res://play_pause.tscn" id="5_omwyd"]
+
+[node name="Master Audio Tool" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gfesw")
+
+[node name="Progress" parent="." instance=ExtResource("1_5ejbc")]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 600.0
+offset_right = -52.0
+offset_bottom = -28.0
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_pirqm")
+
+[node name="CloseUp" parent="." instance=ExtResource("3_w24g4")]
+layout_mode = 1
+offset_left = 182.0
+offset_top = 497.0
+offset_right = -170.0
+offset_bottom = -71.0
+
+[node name="Play Pause" parent="." instance=ExtResource("5_omwyd")]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 577.0
+offset_right = -1072.0
+offset_bottom = -7.0
