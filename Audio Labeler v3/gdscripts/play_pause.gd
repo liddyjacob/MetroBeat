@@ -14,7 +14,6 @@ func _process(delta):
 
 func _on_texture_button_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
-		print("Selected...")
 		# Get audio player
 		var audio_tool = get_node("/root/Master Audio Tool")
 		audio_tool.toggle_playback()

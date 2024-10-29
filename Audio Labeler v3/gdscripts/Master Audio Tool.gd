@@ -2,10 +2,13 @@ extends Control
 
 var rel_position = 0
 var raw_audio_data = Array()
+var amp_audio_data = Array()
 var playback_position = 0
 
 @onready
 var CloseUpDrawArea = $"CloseUp/DrawArea"
+@onready
+var AmpDrawArea = $"AmpGraph/DrawArea"
 @onready
 var audio_stream = get_node("MusicPlayer")
 
@@ -36,7 +39,11 @@ func _process(delta):
 
 # Set the position that we are in the song
 func set_playback_to(rel_pos):
-	rel_position = rel_pos
+	print("setting playback position")
+	playback_position = rel_pos * audio_stream.stream.get_length()
+	if audio_stream.has_stream_playback():
+		audio_stream.seek(playback_position)
+
 
 func _ready():
 	# Build wave instance
@@ -52,6 +59,17 @@ func _ready():
 	
 	# Update data and draw
 	CloseUpDrawArea.update_wave_data(raw_audio_data)
+	
+	var audio_amp_file = FileAccess.open('res://amp.txt', FileAccess.READ)
+	line = audio_amp_file.get_line()
+	amp_audio_data = Array()
+	while line:
+		amp_audio_data.append(str_to_var(line))
+		line = audio_amp_file.get_line()
+	
+	
+	# Update data and draw
+	AmpDrawArea.update_amp_data(amp_audio_data)
 	
 	# Make cameras work
 

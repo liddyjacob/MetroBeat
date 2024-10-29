@@ -52,8 +52,8 @@ func _draw():
 		if index == 0:
 			continue
 
-		draw_line(Vector2.RIGHT * (index - 1) + Vector2.DOWN * ((wave_data[index - 1] * size.y / max_wave_data) + size.y)/2, 
-		Vector2.RIGHT * index + Vector2.DOWN * ((wave_data[index] * size.y / max_wave_data) + size.y)/2, 
+		draw_line(Vector2.RIGHT * (index - 1) + Vector2.UP * ((wave_data[index - 1] * size.y / max_wave_data) - size.y)/2, 
+		Vector2.RIGHT * index + Vector2.UP * ((wave_data[index] * size.y / max_wave_data) - size.y)/2, 
 		Color.BLACK,
 		2)
 	

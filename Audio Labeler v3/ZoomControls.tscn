@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://22jqjjb656al"]
+
+[ext_resource type="Texture2D" uid="uid://byhhgy3yx5xrb" path="res://Textures/zoom-in.png" id="1_28b7f"]
+[ext_resource type="Texture2D" uid="uid://djdastc7doiww" path="res://Textures/magnifying-glass.png" id="2_gqiss"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1116.0
+offset_bottom = -576.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/test = false
+
+[node name="In" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 36.0
+texture_normal = ExtResource("1_28b7f")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Out" type="TextureButton" parent="."]
+layout_mode = 0
+offset_top = 36.0
+offset_right = 36.0
+offset_bottom = 72.0
+texture_normal = ExtResource("2_gqiss")
+ignore_texture_size = true
+stretch_mode = 0
