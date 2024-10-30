@@ -6,12 +6,11 @@ var amp_audio_data = Array()
 var playback_position = 0
 
 @onready
-var CloseUpDrawArea = $"CloseUp/DrawArea"
-@onready
-var AmpDrawArea = $"AmpGraph/DrawArea"
-@onready
 var audio_stream = get_node("MusicPlayer")
+@onready
+var streams_node = $"Streams"
 
+#
 
 func stop():
 	playback_position = audio_stream.get_playback_position()
@@ -56,9 +55,19 @@ func _ready():
 		raw_audio_data.append(str_to_var(line))
 		line = audio_data_file.get_line()
 	
+	var small_raw_audio_data = []
+	var target_reduction = 8
+	for index in range(0, ceil(raw_audio_data.size() / target_reduction)):
+		var threshold = min(target_reduction, raw_audio_data.size() - index*target_reduction )
+		var app_value = 0
+		for j in range(0, threshold):
+			app_value = app_value + raw_audio_data[index*target_reduction + j] / float(threshold)
+		small_raw_audio_data.append(app_value)
+			
+	#raw_audio_data = small_raw_audio_data
 	
 	# Update data and draw
-	CloseUpDrawArea.update_wave_data(raw_audio_data)
+	#CloseUpDrawArea.update_wave_data(raw_audio_data)
 	
 	var audio_amp_file = FileAccess.open('res://amp.txt', FileAccess.READ)
 	line = audio_amp_file.get_line()
@@ -66,11 +75,16 @@ func _ready():
 	while line:
 		amp_audio_data.append(str_to_var(line))
 		line = audio_amp_file.get_line()
+
 	
+	var data_sources = {
+		"raw": raw_audio_data,
+		"amp": amp_audio_data,
+	}
 	
-	# Update data and draw
-	AmpDrawArea.update_amp_data(amp_audio_data)
-	
+	for stream_node in streams_node.get_children():
+		stream_node.load_data_stream(data_sources[stream_node.data_source])
+		stream_node.initialize_defaults()
 	# Make cameras work
 
 

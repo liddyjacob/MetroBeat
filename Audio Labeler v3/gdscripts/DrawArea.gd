@@ -8,7 +8,11 @@ var max_wave_data = Array()
 var focus_wave_data_start = 0
 var focus_wave_data_end = 0
 
+
+
 var audio_tick_delta = -1
+
+
 
 # Skip X frames before next draw
 var skip_frames = 2
@@ -39,7 +43,7 @@ func _process(delta):
 		rel_position = audio_tool.rel_position
 
 		focus_wave_data_start = round(wave_data.size() * rel_position)
-		focus_wave_data_end = focus_wave_data_start + size.x
+		focus_wave_data_end = min(focus_wave_data_start + size.x, wave_data.size())
 		# redraw
 
 		queue_redraw()

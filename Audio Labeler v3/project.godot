@@ -14,7 +14,3 @@ config/name="Audio Labeler V 3"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
-
-[rendering]
-
-anti_aliasing/screen_space_roughness_limiter/enabled=false

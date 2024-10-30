@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://kjhkh735xw0n"]
+[gd_scene load_steps=4 format=3 uid="uid://kjhkh735xw0n"]
 
 [ext_resource type="PackedScene" uid="uid://22jqjjb656al" path="res://ZoomControls.tscn" id="1_cnxeh"]
+[ext_resource type="Script" path="res://gdscripts/GenericStreamManager.gd" id="1_tubob"]
+[ext_resource type="Script" path="res://gdscripts/StreamFG.gd" id="2_a00q5"]
 
-[node name="Control" type="Control"]
+[node name="StreamManager" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,10 +13,13 @@ offset_right = -152.0
 offset_bottom = -548.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_tubob")
 metadata/StreamBGColor = Color(0.811765, 1, 1, 1)
 metadata/StreamDisplayType = "Rolling"
 metadata/StreamFGColor = Color(0, 0, 0, 1)
 metadata/Reflect = false
+metadata/StreamDataType = "Raw"
+metadata/TimeWindowSeconds = 1.0
 
 [node name="StreamBG" type="ColorRect" parent="."]
 layout_mode = 1
@@ -31,6 +36,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_a00q5")
 
 [node name="StreamBar" type="Control" parent="."]
 anchors_preset = 0

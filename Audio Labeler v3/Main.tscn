@@ -1,12 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://nt1ehe3u2owa"]
+[gd_scene load_steps=6 format=3 uid="uid://nt1ehe3u2owa"]
 
 [ext_resource type="PackedScene" uid="uid://bnif78if5uie3" path="res://progress.tscn" id="1_5ejbc"]
 [ext_resource type="Script" path="res://gdscripts/Master Audio Tool.gd" id="1_gfesw"]
-[ext_resource type="PackedScene" uid="uid://c0sv804snqhf4" path="res://close_up.tscn" id="3_w24g4"]
 [ext_resource type="AudioStream" uid="uid://cwjw47x7t312e" path="res://music/JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU - 11 either on or off the drugs.ogg" id="4_pirqm"]
 [ext_resource type="PackedScene" uid="uid://cpfglly6xkhct" path="res://play_pause.tscn" id="5_omwyd"]
-[ext_resource type="PackedScene" uid="uid://dxqh7pdqe5s28" path="res://Amplitude.tscn" id="6_8ux2e"]
-[ext_resource type="PackedScene" uid="uid://22jqjjb656al" path="res://ZoomControls.tscn" id="7_1pt27"]
+[ext_resource type="PackedScene" uid="uid://kjhkh735xw0n" path="res://GenericStreamDisplay.tscn" id="8_ifx6f"]
 
 [node name="Master Audio Tool" type="Control"]
 layout_mode = 3
@@ -27,13 +25,6 @@ offset_bottom = -28.0
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_pirqm")
 
-[node name="CloseUp" parent="." instance=ExtResource("3_w24g4")]
-layout_mode = 1
-offset_left = 206.0
-offset_top = 377.0
-offset_right = -146.0
-offset_bottom = -191.0
-
 [node name="Play Pause" parent="." instance=ExtResource("5_omwyd")]
 layout_mode = 1
 offset_left = 16.0
@@ -41,16 +32,19 @@ offset_top = 577.0
 offset_right = -1072.0
 offset_bottom = -7.0
 
-[node name="AmpGraph" parent="." instance=ExtResource("6_8ux2e")]
-layout_mode = 1
-offset_left = 98.0
-offset_top = 496.0
-offset_right = -54.0
-offset_bottom = -72.0
+[node name="Streams" type="Node" parent="."]
 
-[node name="Control" parent="." instance=ExtResource("7_1pt27")]
-layout_mode = 1
-offset_left = 1108.0
-offset_top = 501.0
-offset_right = -8.0
-offset_bottom = -75.0
+[node name="Raw Signal" parent="Streams" instance=ExtResource("8_ifx6f")]
+offset_left = 100.0
+offset_top = 464.0
+offset_right = -52.0
+offset_bottom = -84.0
+
+[node name="Amp Signal" parent="Streams" instance=ExtResource("8_ifx6f")]
+offset_left = 100.0
+offset_top = 329.0
+offset_right = -52.0
+offset_bottom = -219.0
+time_window = 2.0
+reflect = true
+data_source = "amp"
