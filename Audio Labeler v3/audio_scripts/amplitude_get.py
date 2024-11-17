@@ -4,7 +4,7 @@ import sys
 
 
 if __name__ == "__main__":
-    time_series, _ = librosa.load(sys.argv[1], sr=5000)
+    time_series, _ = librosa.load(sys.argv[1], sr=6000)
     ts_squared = np.cumsum(time_series ** 2)
     amplitudes_over_10ms = ts_squared[50:] - ts_squared[:-50]
     rme_10ms = np.sqrt(amplitudes_over_10ms / 50)

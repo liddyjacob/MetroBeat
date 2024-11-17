@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://nt1ehe3u2owa"]
+[gd_scene load_steps=8 format=3 uid="uid://nt1ehe3u2owa"]
 
 [ext_resource type="PackedScene" uid="uid://bnif78if5uie3" path="res://progress.tscn" id="1_5ejbc"]
 [ext_resource type="Script" path="res://gdscripts/Master Audio Tool.gd" id="1_gfesw"]
+[ext_resource type="Script" path="res://gdscripts/Metronome.gd" id="4_l24vc"]
 [ext_resource type="AudioStream" uid="uid://cwjw47x7t312e" path="res://music/JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU - 11 either on or off the drugs.ogg" id="4_pirqm"]
 [ext_resource type="PackedScene" uid="uid://cpfglly6xkhct" path="res://play_pause.tscn" id="5_omwyd"]
 [ext_resource type="PackedScene" uid="uid://kjhkh735xw0n" path="res://GenericStreamDisplay.tscn" id="8_ifx6f"]
+
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_lp8yj"]
+buffer_length = 0.1
 
 [node name="Master Audio Tool" type="Control"]
 layout_mode = 3
@@ -24,6 +28,13 @@ offset_bottom = -28.0
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_pirqm")
+
+[node name="Metronome" type="Node" parent="."]
+script = ExtResource("4_l24vc")
+
+[node name="MetronomePlayer" type="AudioStreamPlayer" parent="Metronome"]
+stream = SubResource("AudioStreamGenerator_lp8yj")
+volume_db = -18.238
 
 [node name="Play Pause" parent="." instance=ExtResource("5_omwyd")]
 layout_mode = 1
@@ -48,3 +59,4 @@ offset_bottom = -219.0
 time_window = 2.0
 reflect = true
 data_source = "amp"
+window_type = "frame"
