@@ -12,38 +12,46 @@ var audio_stream = get_node("MusicPlayer")
 var streams_node = $"Streams"
 @onready
 var metronome = $"Metronome"
+@onready
+var sound_box = $"SoundBox"
+
 #
 # add a beat to the track
 func add_beat(rel_position):
 	beat_array.append(rel_position)
 	beat_array.sort()
+	for stream_node in streams_node.get_children():
+		stream_node.add_beat(rel_position)
+
+func remove_beat(rel_position):
+	beat_array.erase(rel_position)
+	for stream_node in streams_node.get_children():
+		stream_node.remove_beat(rel_position)
 
 # Binary search for next beat
 func get_next_beat():
-	if (beat_array.size() == 0) or (rel_position > beat_array[-1]):
+	if beat_array.size() == 0 or (rel_position > beat_array[-1]):
+		return null
+	return beat_array[beat_array.bsearch(rel_position, false)]
+	
+func get_beat_ids_in_range(rel_start, rel_end):
+	if (beat_array.size() == 0) or (rel_start > beat_array[-1]) or (rel_end < beat_array[0]) :
 		return null
 	
-	var search_start = 0
-	var search_end = beat_array.size() - 1
-	
-	while search_start != search_end:
-		var center = search_start + int((search_end - search_start) / 2)
-		if beat_array[center] < rel_position:
-			search_start = center + 1
-		else:
-			search_end = center 
+	var start_position = beat_array.bsearch(rel_start, false)
+	var end_position = beat_array.bsearch(rel_end, false)
 			
-	return beat_array[search_start]
+	return Vector2(start_position, end_position)
 	
-	
-	
-
 func stop():
 	playback_position = audio_stream.get_playback_position()
 	audio_stream.stop()
 
 func play():
 	audio_stream.play(playback_position)
+
+func is_playing():
+	return audio_stream.is_playing()
 
 func toggle_playback():
 	# If playing, stop
@@ -52,8 +60,6 @@ func toggle_playback():
 	else:
 	# If not playing, play
 		play()
-
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -66,21 +72,19 @@ func _process(delta):
 		var closest_next_beat = get_next_beat()
 		# Calculate the number of seconds until the next beat
 		
-		
 		# Emit percuss signal in x seconds
 		if closest_next_beat:
 			var sec_remaining = audio_stream.stream.get_length() * (closest_next_beat - rel_position) 
-			metronome.percuss_in(sec_remaining)
-		
-			
+			if sec_remaining < .2:
+				metronome.percuss_in(sec_remaining)
 
 # Set the position that we are in the song
 func set_playback_to(rel_pos):
-	print("setting playback position")
+	print(rel_pos)
 	playback_position = rel_pos * audio_stream.stream.get_length()
+	print(playback_position)
 	if audio_stream.has_stream_playback():
 		audio_stream.seek(playback_position)
-
 
 func _ready():
 	# Build wave instance
@@ -122,8 +126,6 @@ func _ready():
 	for stream_node in streams_node.get_children():
 		stream_node.load_data_stream(data_sources[stream_node.data_source])
 		stream_node.initialize_defaults()
-	# Make cameras work
-
 
 func report_hover(hover_rel_position):
 	for stream_node in streams_node.get_children():
@@ -133,6 +135,18 @@ func hide_hover():
 	for stream_node in streams_node.get_children():
 		stream_node.hide_line_marker()
 
-func report_press_event(press_rel_position):
+func report_empty_press_event(press_rel_position):
 	add_beat(press_rel_position)
-	print("Pressed on " + str(press_rel_position))
+	metronome.percuss()
+	
+func report_annotated_press_event(press_rel_position):
+	remove_beat(press_rel_position)
+	sound_box.delete_sound()
+	
+func beat_focus(rel_position):
+	for stream_node in streams_node.get_children():
+		stream_node.focus_beat(rel_position)
+		
+func beat_unfocus(rel_position):
+	for stream_node in streams_node.get_children():
+		stream_node.unfocus_beat(rel_position)

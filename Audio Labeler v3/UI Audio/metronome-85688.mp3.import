@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bmwh0lno3e8ro"
+path="res://.godot/imported/metronome-85688.mp3-8a22221e00a0477ffdf93137b01aa3b3.mp3str"
+
+[deps]
+
+source_file="res://UI Audio/metronome-85688.mp3"
+dest_files=["res://.godot/imported/metronome-85688.mp3-8a22221e00a0477ffdf93137b01aa3b3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

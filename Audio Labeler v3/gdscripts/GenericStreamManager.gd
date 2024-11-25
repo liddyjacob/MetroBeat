@@ -8,10 +8,18 @@ var zoom_options = []
 
 var zoom_level = 0
 
+var rel_position_start = 0
 var focus_wave_data_start = 0
+var rel_position_end = 0
 var focus_wave_data_end = 0
-
 var max_abs_data_stream = 0
+
+# Register of all beat and locations
+var BeatRegistry = {}
+
+#const MusicalAnnotation = preload("res://musical_annotation.tscn")
+
+
 
 @onready
 var streamFG = $"StreamFG"
@@ -36,15 +44,27 @@ func _ready():
 
 func draw_stream():
 	if window_type == "rolling":
-		focus_wave_data_start = round(data_stream.size() * rel_position) - size.x / 2
-		focus_wave_data_end = focus_wave_data_start + size.x
+		rel_position_start = rel_position - size.x / ( 2 * data_stream.size() )
 	if window_type == "frame":
-		focus_wave_data_start = round(data_stream.size() * rel_position)
-		focus_wave_data_end = focus_wave_data_start + size.x
+		rel_position_start = rel_position
 	
+	rel_position_end = rel_position_start + size.x / data_stream.size()
+	focus_wave_data_start = round(rel_position_start * data_stream.size())
+	focus_wave_data_end = round(rel_position_end * data_stream.size())
 	ScrollBarObj.value = rel_position * ScrollBarObj.max_value
 	# redraw
 	streamFG.queue_redraw()
+
+func add_beat(position):
+	var BeatMarker = Beat.new_beat(position)
+	add_child(BeatMarker)
+	BeatMarker.set_visible(false)
+	BeatRegistry[position] = BeatMarker
+
+# Remove a beat from the registry
+func remove_beat(position):
+	BeatRegistry[position].queue_free()
+	BeatRegistry.erase(position)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -58,8 +78,40 @@ func _process(delta):
 			if (round(data_stream.size() * rel_position) >= focus_wave_data_end) or (round(data_stream.size() * rel_position) < focus_wave_data_start):
 				draw_stream()
 			streamBar.position.x = size.x * (round(data_stream.size() * rel_position) - focus_wave_data_start) / (focus_wave_data_end - focus_wave_data_start) - 3
+	
+	var beats_in_range = audio_tool.get_beat_ids_in_range(rel_position_start, rel_position_end)
+	if beats_in_range == null:
+		# Hide all if nothing should be displayed
+		for beat_id in range(0, audio_tool.beat_array.size()):
+			var beat_occurance =  audio_tool.beat_array[beat_id]
+			var BeatMarker = BeatRegistry[beat_occurance]
+			BeatMarker.set_visible(false)
+		return
 
+	# Turn on beats in range	
+	for beat_id in range(beats_in_range[0], beats_in_range[1]):
+		var beat_occurance =  audio_tool.beat_array[beat_id]
+		var BeatMarker = BeatRegistry[beat_occurance]
+		var wave_position_beat = ((beat_occurance - rel_position_start) / (rel_position_end - rel_position_start)) * size.x
+		BeatMarker.position.x = round(wave_position_beat)
+		BeatMarker.set_visible(true)
 		
+	for beat_id in range(beats_in_range[0] - 1, -1, -1):
+		var beat_occurance =  audio_tool.beat_array[beat_id]
+		var BeatMarker = BeatRegistry[beat_occurance]
+		if BeatMarker.visible:
+			print("setting invisible")
+			BeatMarker.set_visible(false)
+		else:
+			break
+	
+	for beat_id in range(beats_in_range[1] + 1, audio_tool.beat_array.size()):
+		var beat_occurance =  audio_tool.beat_array[beat_id]
+		var BeatMarker = BeatRegistry[beat_occurance]
+		if BeatMarker.visible:
+			BeatMarker.set_visible(false)
+		else:
+			break
 
 
 # Pass needed data onto stream:
@@ -117,8 +169,8 @@ func zoom_out():
 func _on_stream_hit_box_gui_input(event):
 	if event is InputEventMouseMotion:
 		audio_tool.report_hover(float(focus_wave_data_start + self.get_local_mouse_position().x) / data_stream.size())
-	if event is InputEventMouseButton and event.pressed:
-		audio_tool.report_press_event(float(focus_wave_data_start + self.get_local_mouse_position().x) / data_stream.size())
+	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+		audio_tool.report_empty_press_event(float(focus_wave_data_start + self.get_local_mouse_position().x) / data_stream.size())
 
 # Show a line marker if it is in range
 func show_line_marker(line_rel_position):
@@ -143,3 +195,25 @@ func _on_scroll_bar_scrolling():
 func _on_stream_hit_box_mouse_exited():
 	audio_tool.hide_hover()
 	pass # Replace with function body.
+	
+	
+func communicate_beat_focus(rel_position):
+	audio_tool.beat_focus(rel_position)
+	
+func communicate_beat_unfocus(rel_position):
+	audio_tool.beat_unfocus(rel_position)
+	
+# Make beat show up
+func focus_beat(rel_position):
+	if BeatRegistry.has(rel_position):
+		BeatRegistry[rel_position].focus()
+
+# hide beat highlight
+func unfocus_beat(rel_position):
+	if BeatRegistry.has(rel_position):
+		BeatRegistry[rel_position].unfocus()
+
+func communicate_gui_input(event, rel_position):
+	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+		audio_tool.report_annotated_press_event(rel_position)
+

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bctd81sbuf8mu"
+path="res://.godot/imported/metal-beaten-sfx-230501.mp3-95ebc51c73a630a4923c9af9918ff8e2.mp3str"
+
+[deps]
+
+source_file="res://UI Audio/metal-beaten-sfx-230501.mp3"
+dest_files=["res://.godot/imported/metal-beaten-sfx-230501.mp3-95ebc51c73a630a4923c9af9918ff8e2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

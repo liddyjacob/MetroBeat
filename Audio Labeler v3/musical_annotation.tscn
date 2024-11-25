@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3q86tr55k1yd"]
+
+[ext_resource type="Script" path="res://gdscripts/musical_annotation.gd" id="1_f2ouj"]
+
+[node name="MusicalAnnotation" type="Control"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+script = ExtResource("1_f2ouj")
+
+[node name="Column" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 8.0
+offset_right = 1.0
+offset_bottom = 92.0
+color = Color(0.054902, 0.596078, 0.890196, 1)
+
+[node name="Upper" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 8.0
+offset_right = 9.0
+offset_bottom = 9.0
+color = Color(0.054902, 0.596078, 0.890196, 1)
+
+[node name="Lower" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 92.0
+offset_right = 9.0
+offset_bottom = 93.0
+color = Color(0.054902, 0.596078, 0.890196, 1)
+
+[node name="Highlight" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -8.0
+offset_top = 8.0
+offset_right = 9.0
+offset_bottom = 93.0
+color = Color(0.752941, 0.972549, 0.964706, 0.615686)
+
+[node name="Hitbox" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 8.0
+offset_right = 9.0
+offset_bottom = 93.0
+color = Color(1, 1, 1, 0)
+
+[connection signal="gui_input" from="Hitbox" to="." method="_on_hitbox_gui_input"]
+[connection signal="mouse_entered" from="Hitbox" to="." method="_on_hitbox_mouse_entered"]
+[connection signal="mouse_exited" from="Hitbox" to="." method="_on_hitbox_mouse_exited"]

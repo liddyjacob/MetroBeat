@@ -1,14 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://nt1ehe3u2owa"]
+[gd_scene load_steps=10 format=3 uid="uid://nt1ehe3u2owa"]
 
 [ext_resource type="PackedScene" uid="uid://bnif78if5uie3" path="res://progress.tscn" id="1_5ejbc"]
 [ext_resource type="Script" path="res://gdscripts/Master Audio Tool.gd" id="1_gfesw"]
 [ext_resource type="Script" path="res://gdscripts/Metronome.gd" id="4_l24vc"]
 [ext_resource type="AudioStream" uid="uid://cwjw47x7t312e" path="res://music/JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU - 11 either on or off the drugs.ogg" id="4_pirqm"]
 [ext_resource type="PackedScene" uid="uid://cpfglly6xkhct" path="res://play_pause.tscn" id="5_omwyd"]
+[ext_resource type="AudioStream" uid="uid://bmwh0lno3e8ro" path="res://UI Audio/metronome-85688.mp3" id="5_xpd4q"]
+[ext_resource type="Script" path="res://gdscripts/SoundBox.gd" id="8_g6ip3"]
 [ext_resource type="PackedScene" uid="uid://kjhkh735xw0n" path="res://GenericStreamDisplay.tscn" id="8_ifx6f"]
-
-[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_lp8yj"]
-buffer_length = 0.1
+[ext_resource type="AudioStream" uid="uid://b17v7bno8rf61" path="res://UI Audio/catching-beer-bottles_2-75028.mp3" id="9_c6ykf"]
 
 [node name="Master Audio Tool" type="Control"]
 layout_mode = 3
@@ -21,10 +21,10 @@ script = ExtResource("1_gfesw")
 
 [node name="Progress" parent="." instance=ExtResource("1_5ejbc")]
 layout_mode = 1
-offset_left = 100.0
-offset_top = 600.0
-offset_right = -52.0
-offset_bottom = -28.0
+offset_left = 85.0
+offset_top = 848.0
+offset_right = -65.0
+offset_bottom = 220.0
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_pirqm")
@@ -33,30 +33,38 @@ stream = ExtResource("4_pirqm")
 script = ExtResource("4_l24vc")
 
 [node name="MetronomePlayer" type="AudioStreamPlayer" parent="Metronome"]
-stream = SubResource("AudioStreamGenerator_lp8yj")
-volume_db = -18.238
+stream = ExtResource("5_xpd4q")
+volume_db = -5.0
 
 [node name="Play Pause" parent="." instance=ExtResource("5_omwyd")]
 layout_mode = 1
-offset_left = 16.0
-offset_top = 577.0
-offset_right = -1072.0
+offset_left = 10.0
+offset_top = 825.0
+offset_right = -1522.0
 offset_bottom = -7.0
 
 [node name="Streams" type="Node" parent="."]
 
 [node name="Raw Signal" parent="Streams" instance=ExtResource("8_ifx6f")]
-offset_left = 100.0
-offset_top = 464.0
-offset_right = -52.0
-offset_bottom = -84.0
+offset_left = 85.0
+offset_top = 710.0
+offset_right = -65.0
+offset_bottom = -90.0
 
 [node name="Amp Signal" parent="Streams" instance=ExtResource("8_ifx6f")]
-offset_left = 100.0
-offset_top = 329.0
-offset_right = -52.0
-offset_bottom = -219.0
+offset_left = 85.0
+offset_top = 575.0
+offset_right = -65.0
+offset_bottom = -225.0
 time_window = 2.0
 reflect = true
 data_source = "amp"
 window_type = "frame"
+
+[node name="SoundBox" type="Node" parent="."]
+script = ExtResource("8_g6ip3")
+
+[node name="RemovePlayer" type="AudioStreamPlayer" parent="SoundBox"]
+stream = ExtResource("9_c6ykf")
+volume_db = -10.0
+pitch_scale = 0.95

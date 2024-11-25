@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b17v7bno8rf61"
+path="res://.godot/imported/catching-beer-bottles_2-75028.mp3-b4c1d9285a9764e6ba3d2eaa43a86935.mp3str"
+
+[deps]
+
+source_file="res://UI Audio/catching-beer-bottles_2-75028.mp3"
+dest_files=["res://.godot/imported/catching-beer-bottles_2-75028.mp3-b4c1d9285a9764e6ba3d2eaa43a86935.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -24,7 +24,7 @@ script = ExtResource("2_ydvk1")
 
 [node name="Total" type="ColorRect" parent="."]
 layout_mode = 0
-offset_right = 1000.0
+offset_right = 1450.0
 offset_bottom = 20.0
 
 [connection signal="gui_input" from="Completed" to="." method="_on_completed_gui_input"]
