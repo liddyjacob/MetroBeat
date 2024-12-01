@@ -1,11 +1,56 @@
 # MetroBeat Tempo and Beat analyzer
 
+This repository contains the code for labeling audio data and creating a machine learning model that
+will automatically label the beat track in a song. Once this is complete, a new repository will be 
+made for creating my own music visualizer tool.
+
+## Overview
+
+### Motivation
+
+I've always wanted to make my own music visualizer, as I grew up in the 2000s when they were 
+prevalent. I wanted to make mine inspired by the cartoons seen on Teenage Engineering devices, but
+with a "nintendo-like" quality where the tempo and key signature are elemental to the 
+visualizations going on(For example, Super Mario Odessey integrates its music into the world around
+you)
+
+Most visualizers do not do this. Instead, they focus on showing frequencies based off STFT, basing
+visuals almost soely on the spectrogram and amplitude. This limited information leads to most audio
+visualizers doing more-or-less the same thing.
+
+To expand the possibilities of the music visualizer that I am designing, I need to first understand 
+the tempo of a song. Further, I must understand when a song is changing tempo or time signature. 
+This leads me to finding the "beats" of a song, so that I can help my visualizer understand the 
+pulse of a song. While this may feel subjective, most musicians, especially percussionists and 
+producers, will agree on the "pulse" or "feel" of a song. This is often the basis to how improvised
+music is made.
+
+I first tried to solve this problem by using existing tools. Librosa has a `beat\_track` function
+that works well enough on popular songs, especially more formulaic Pop and Rock. However,
+this model fails for modern music in genres such as Jazz, Hip-Hop, and IDM. Especially on tracks
+with non-standard time signatures, such as 7/8. Therefore I intend on creating a machine learning
+tool that will identify the beats of songs outside of older pop and rock. Selfishly, I want this
+to work best on the music that I listen too, but I will be even happier if I can create a model 
+that is best in class across a very wide variety of genres.
+
+### Approach
+
+While I could probably find a decent set of music tracks with annotated beats / tempo, I'd like to 
+use this opportunity to understand audio from the ground up. Therefore I am starting with nothing 
+but unlabeled audio data. I indent to create a tool to help me annotate the music myself, and 
+then use this tool to label hundreds of tracks myself. 
+
+Once I have labeled music, I will import it into a programming language and build my model from 
+the ground up. I may reference other guides for help, but understand that this project is not
+just another codeacademy or medium exercise - this is a wholly original project so that I can 
+learn everything from the basics to exploring my own, original ideas.
+
+Finally I intend to deploy this project on the web, so that anyone can label the music they have.
+I may also release a version of this as a plug in VST for Digital Audio Workstations such as Logic
+and Ableton.
+
+## Details
+
+### Data Labeling 
 
 ![Image of Audio Labeling Tool](https://github.com/liddyjacob/MetroBeat/blob/main/GithubReadmeResources/AudioTool.png?raw=true)
-librosa's Beat and Tempo detection methods fail for some examples, especially those in 6/8. This project serves as a way to improve beat detection.
-
-First thing is first, we need some audio to analyze. As an exercise in bringing a project from scratch to finish, I will build an audio labeling tool. This will be done in the game engine Godot
-
-I think I need to decide on a valid range of 'clicks' per minute. Note this is not tempo, for if a song is too slow, we will measure the eigth notes per measure instead of the typical quarter notes, for example.
-
-
