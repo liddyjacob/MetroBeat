@@ -51,6 +51,18 @@ and Ableton.
 
 ## Details
 
+The following sections will detail each step of the process
+
 ### Data Labeling 
+
+
+This section will be more thorogh later, but for now here are some details:
+* I am using Godot to buily my labeler
+* I am integrating python into godot when necessary, for access to librosa and numpy
+* Godot is only needed for labeling, once the data is labeled the tool will not be
+needed for interpretation.
+* Here is a screenshot of the tool so far. Top is the amplitude over time, middle is the wave-form,
+bottom is song progess. Blue lines are music annotations.
+
 
 ![Image of Audio Labeling Tool](https://github.com/liddyjacob/MetroBeat/blob/main/GithubReadmeResources/AudioTool.png?raw=true)
