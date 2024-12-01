@@ -42,7 +42,7 @@ then use this tool to label hundreds of tracks myself.
 
 Once I have labeled music, I will import it into a programming language and build my model from 
 the ground up. I may reference other guides for help, but understand that this project is not
-just another codeacademy or medium exercise - this is a wholly original project so that I can 
+just another codecademy or medium exercise - this is a wholly original project so that I can 
 learn everything from the basics to exploring my own, original ideas.
 
 Finally I intend to deploy this project on the web, so that anyone can label the music they have.
