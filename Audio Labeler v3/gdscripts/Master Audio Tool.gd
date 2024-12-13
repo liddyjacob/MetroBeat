@@ -5,6 +5,8 @@ var raw_audio_data = Array()
 var amp_audio_data = Array()
 var playback_position = 0
 var beat_array = Array()
+const DELTA = .001
+
 
 @onready
 var audio_stream = get_node("MusicPlayer")
@@ -14,14 +16,22 @@ var streams_node = $"Streams"
 var metronome = $"Metronome"
 @onready
 var sound_box = $"SoundBox"
+@onready
+var mode = $"Mode"
+@onready
+var BPMTextEditor = $"BPMAnnotator/TextEdit"
 
 #
+
 # add a beat to the track
 func add_beat(rel_position):
 	beat_array.append(rel_position)
 	beat_array.sort()
 	for stream_node in streams_node.get_children():
 		stream_node.add_beat(rel_position)
+
+func highlight_beat(rel_position):
+	print("Highlighting beat at  " + str(rel_position))
 
 func remove_beat(rel_position):
 	beat_array.erase(rel_position)
@@ -75,7 +85,7 @@ func _process(delta):
 		# Emit percuss signal in x seconds
 		if closest_next_beat:
 			var sec_remaining = audio_stream.stream.get_length() * (closest_next_beat - rel_position) 
-			if sec_remaining < .2:
+			if sec_remaining < .025:
 				metronome.percuss_in(sec_remaining)
 
 # Set the position that we are in the song
@@ -140,8 +150,12 @@ func report_empty_press_event(press_rel_position):
 	metronome.percuss()
 	
 func report_annotated_press_event(press_rel_position):
-	remove_beat(press_rel_position)
-	sound_box.delete_sound()
+	if mode.is_annotate():
+		remove_beat(press_rel_position)
+		sound_box.delete_sound()
+	if mode.is_select():
+		highlight_beat(press_rel_position)
+		
 	
 func beat_focus(rel_position):
 	for stream_node in streams_node.get_children():
@@ -150,3 +164,39 @@ func beat_focus(rel_position):
 func beat_unfocus(rel_position):
 	for stream_node in streams_node.get_children():
 		stream_node.unfocus_beat(rel_position)
+
+
+func slight_reverse():
+	if rel_position < DELTA:
+		set_playback_to(0)
+	else:
+		set_playback_to(rel_position - DELTA)
+	
+func slight_forward():
+	if 1 - rel_position < DELTA:
+		set_playback_to(1)
+	else:
+		set_playback_to(rel_position + DELTA)
+
+func _input(event):
+	if ! BPMTextEditor.has_focus():
+		if Input.is_key_pressed(KEY_A):
+			print("Annotate Mode.")
+			mode.set_annotate()
+			
+		if Input.is_key_pressed(KEY_S):
+			print("Select Mode.")
+			mode.set_select()
+			
+		if Input.is_key_pressed(KEY_D):
+			print("Drag Mode.")
+			mode.set_drag()
+			
+		if Input.is_key_pressed(KEY_LEFT):
+			slight_reverse()
+			
+		if Input.is_key_pressed(KEY_RIGHT):
+			slight_forward()
+			
+		if Input.is_key_pressed(KEY_SPACE):
+			toggle_playback()

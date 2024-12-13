@@ -9,3 +9,5 @@ static func new_beat(relative_position: float):
 	var new_beat = musical_annotation.instantiate()
 	new_beat.relative_position = relative_position
 	return new_beat
+	
+

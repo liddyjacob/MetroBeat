@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://djwktnuuhgvk7"]
+
+[ext_resource type="Script" path="res://gdscripts/TextEdit.gd" id="1_6jp3d"]
+[ext_resource type="Texture2D" uid="uid://dh1xh5iyt8i41" path="res://Textures/plus.png" id="1_puqt7"]
+
+[node name="BPMAnnotator" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1325.0
+offset_bottom = -825.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextEdit" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 16.0
+offset_right = 255.0
+offset_bottom = 66.0
+text = "120"
+placeholder_text = "120"
+script = ExtResource("1_6jp3d")
+
+[node name="Add" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 75.0
+offset_bottom = 75.0
+texture_normal = ExtResource("1_puqt7")
+ignore_texture_size = true
+stretch_mode = 6
+
+[connection signal="mouse_entered" from="TextEdit" to="TextEdit" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="TextEdit" to="TextEdit" method="_on_mouse_exited"]
