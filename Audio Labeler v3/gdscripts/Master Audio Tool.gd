@@ -6,7 +6,8 @@ var amp_audio_data = Array()
 var playback_position = 0
 var beat_array = Array()
 const DELTA = .001
-
+var highlighted_beat = null
+var tempo = null
 
 @onready
 var audio_stream = get_node("MusicPlayer")
@@ -30,9 +31,15 @@ func add_beat(rel_position):
 	for stream_node in streams_node.get_children():
 		stream_node.add_beat(rel_position)
 
-func highlight_beat(rel_position):
-	print("Highlighting beat at  " + str(rel_position))
-
+func highlight_beat(beat_rel_position):
+	highlighted_beat = beat_rel_position
+	
+	# Set estimated tempo based of last 5 beats:
+	estimate_tempo()
+	
+	BPMTextEditor.text = str(tempo)
+	
+	
 func remove_beat(rel_position):
 	beat_array.erase(rel_position)
 	for stream_node in streams_node.get_children():
@@ -146,8 +153,9 @@ func hide_hover():
 		stream_node.hide_line_marker()
 
 func report_empty_press_event(press_rel_position):
-	add_beat(press_rel_position)
-	metronome.percuss()
+	if mode.is_annotate():
+		add_beat(press_rel_position)
+		metronome.percuss()
 	
 func report_annotated_press_event(press_rel_position):
 	if mode.is_annotate():
@@ -165,6 +173,32 @@ func beat_unfocus(rel_position):
 	for stream_node in streams_node.get_children():
 		stream_node.unfocus_beat(rel_position)
 
+func estimate_tempo():
+	if not highlighted_beat:
+		return
+	var position = beat_array.bsearch(highlighted_beat)
+	if position == 0:
+		return
+	
+	var latest_beats = beat_array.slice(max(0, position - 4), position + 1)
+	print(latest_beats)
+	var distances = []
+	for i in range(latest_beats.size() - 1):
+		print(latest_beats[i + 1] - latest_beats[i])
+		distances.append(latest_beats[i + 1] - latest_beats[i])
+	
+	var sum = func(a,b):
+		return(a + b)
+	
+	print(distances)
+	var total = distances[0]
+	if distances.size() > 1: 
+		total = distances.reduce(sum)
+	
+	var avg = total / (distances.size())
+	
+	tempo = (1 / (avg *  (audio_stream.stream.get_length() / 60)))
+	
 
 func slight_reverse():
 	if rel_position < DELTA:
@@ -181,14 +215,17 @@ func slight_forward():
 func _input(event):
 	if ! BPMTextEditor.has_focus():
 		if Input.is_key_pressed(KEY_A):
+			highlighted_beat = null
 			print("Annotate Mode.")
 			mode.set_annotate()
 			
 		if Input.is_key_pressed(KEY_S):
+			highlighted_beat = null
 			print("Select Mode.")
 			mode.set_select()
 			
 		if Input.is_key_pressed(KEY_D):
+			highlighted_beat = null
 			print("Drag Mode.")
 			mode.set_drag()
 			
@@ -200,3 +237,4 @@ func _input(event):
 			
 		if Input.is_key_pressed(KEY_SPACE):
 			toggle_playback()
+

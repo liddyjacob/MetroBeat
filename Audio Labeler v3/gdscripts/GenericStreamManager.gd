@@ -31,6 +31,8 @@ var streamBar = $"StreamBar"
 var markerLine = $"MarkerLine"
 @onready
 var ScrollBarObj = $"ScrollBar"
+@onready
+var mode = get_node("/root/Mode")
 
 @export var time_window = 1.0
 @export var reflect = false
@@ -86,6 +88,8 @@ func _process(delta):
 			var beat_occurance =  audio_tool.beat_array[beat_id]
 			var BeatMarker = BeatRegistry[beat_occurance]
 			BeatMarker.set_visible(false)
+			BeatMarker.set_selected(false)
+
 		return
 
 	# Turn on beats in range	
@@ -95,6 +99,10 @@ func _process(delta):
 		var wave_position_beat = ((beat_occurance - rel_position_start) / (rel_position_end - rel_position_start)) * size.x
 		BeatMarker.position.x = round(wave_position_beat)
 		BeatMarker.set_visible(true)
+		if beat_occurance == audio_tool.highlighted_beat:
+			BeatMarker.set_selected(true)
+		else:
+			BeatMarker.set_selected(false)
 		
 	for beat_id in range(beats_in_range[0] - 1, -1, -1):
 		var beat_occurance =  audio_tool.beat_array[beat_id]
@@ -102,6 +110,7 @@ func _process(delta):
 		if BeatMarker.visible:
 			print("setting invisible")
 			BeatMarker.set_visible(false)
+			BeatMarker.set_selected(false)
 		else:
 			break
 	
@@ -110,6 +119,7 @@ func _process(delta):
 		var BeatMarker = BeatRegistry[beat_occurance]
 		if BeatMarker.visible:
 			BeatMarker.set_visible(false)
+			BeatMarker.set_selected(false)
 		else:
 			break
 

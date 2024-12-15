@@ -2,7 +2,8 @@ extends Control
 
 @onready
 var highlight = $Highlight
-
+@onready
+var selected = $Selected
 @onready
 var Parent = get_parent()
 
@@ -30,6 +31,14 @@ func focus():
 	
 func unfocus():
 	highlight.hide()
+	
+func set_selected(value: bool):
+	if value:
+		selected.show()
+	else:
+		selected.hide()
+	
+	
 
 
 func _on_hitbox_gui_input(event):
