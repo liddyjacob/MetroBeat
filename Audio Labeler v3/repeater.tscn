@@ -1,0 +1,126 @@
+[gd_scene load_steps=4 format=3 uid="uid://qr6kr4ktxgu3"]
+
+[ext_resource type="Texture2D" uid="uid://brtgxioyw635x" path="res://Textures/pngegg.png" id="1_2qlfe"]
+[ext_resource type="Script" path="res://gdscripts/repeater.gd" id="1_dnb2h"]
+[ext_resource type="Script" path="res://gdscripts/RepeatBtn.gd" id="3_ynopi"]
+
+[node name="Repeater" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1200.0
+offset_bottom = -850.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dnb2h")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+texture = ExtResource("1_2qlfe")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="16" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 183.0
+offset_right = 246.0
+offset_bottom = 51.0
+theme_override_font_sizes/normal_font_size = 34
+text = "x16"
+fit_content = true
+
+[node name="16Btn" type="ColorRect" parent="16"]
+layout_mode = 0
+offset_right = 63.0
+offset_bottom = 51.0
+color = Color(0.964706, 0.839216, 0.529412, 0.239216)
+script = ExtResource("3_ynopi")
+metadata/Multiplier = 16
+
+[node name="32" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 323.0
+offset_right = 386.0
+offset_bottom = 51.0
+theme_override_font_sizes/normal_font_size = 34
+text = "x32
+"
+fit_content = true
+
+[node name="32Btn" type="ColorRect" parent="32"]
+layout_mode = 0
+offset_right = 63.0
+offset_bottom = 51.0
+color = Color(0.964706, 0.839216, 0.529412, 0.239216)
+script = ExtResource("3_ynopi")
+metadata/Multiplier = 32
+
+[node name="24" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 252.0
+offset_right = 315.0
+offset_bottom = 51.0
+theme_override_font_sizes/normal_font_size = 34
+text = "x24"
+fit_content = true
+
+[node name="24btn" type="ColorRect" parent="24"]
+layout_mode = 0
+offset_right = 63.0
+offset_bottom = 51.0
+color = Color(0.964706, 0.839216, 0.529412, 0.239216)
+script = ExtResource("3_ynopi")
+metadata/Multiplier = 24
+
+[node name="8" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 51.0
+offset_right = 108.0
+offset_bottom = 51.0
+theme_override_font_sizes/normal_font_size = 34
+text = "x8"
+fit_content = true
+
+[node name="8Btn" type="ColorRect" parent="8"]
+layout_mode = 0
+offset_right = 57.0
+offset_bottom = 51.0
+color = Color(0.964706, 0.839216, 0.529412, 0.239216)
+script = ExtResource("3_ynopi")
+metadata/Multiplier = 8
+
+[node name="12" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 113.0
+offset_right = 176.0
+offset_bottom = 51.0
+theme_override_font_sizes/normal_font_size = 34
+text = "x12"
+fit_content = true
+
+[node name="12Btn" type="ColorRect" parent="12"]
+layout_mode = 0
+offset_right = 62.0
+offset_bottom = 51.0
+color = Color(0.964706, 0.839216, 0.529412, 0.239216)
+script = ExtResource("3_ynopi")
+metadata/Multiplier = 12
+
+[connection signal="gui_input" from="16/16Btn" to="16/16Btn" method="_on_gui_input"]
+[connection signal="mouse_entered" from="16/16Btn" to="16/16Btn" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="16/16Btn" to="16/16Btn" method="_on_mouse_exited"]
+[connection signal="gui_input" from="32/32Btn" to="32/32Btn" method="_on_gui_input"]
+[connection signal="mouse_entered" from="32/32Btn" to="32/32Btn" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="32/32Btn" to="32/32Btn" method="_on_mouse_exited"]
+[connection signal="gui_input" from="24/24btn" to="24/24btn" method="_on_gui_input"]
+[connection signal="mouse_entered" from="24/24btn" to="24/24btn" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="24/24btn" to="24/24btn" method="_on_mouse_exited"]
+[connection signal="gui_input" from="8/8Btn" to="8/8Btn" method="_on_gui_input"]
+[connection signal="mouse_entered" from="8/8Btn" to="8/8Btn" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="8/8Btn" to="8/8Btn" method="_on_mouse_exited"]
+[connection signal="gui_input" from="12/12Btn" to="12/12Btn" method="_on_gui_input"]
+[connection signal="mouse_entered" from="12/12Btn" to="12/12Btn" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="12/12Btn" to="12/12Btn" method="_on_mouse_exited"]

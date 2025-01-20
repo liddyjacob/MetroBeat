@@ -8,6 +8,10 @@ var beat_array = Array()
 const DELTA = .001
 var highlighted_beat = null
 var tempo = null
+var sounds_array = [] 
+var sounds_dict = {}
+var audio_file = ''
+
 
 @onready
 var audio_stream = get_node("MusicPlayer")
@@ -23,6 +27,15 @@ var mode = $"Mode"
 var BPMTextEditor = $"BPMAnnotator/TextEdit"
 
 #
+# Save the beats to a file
+func savebeats():
+	var file = FileAccess.open("user://" + audio_file + ".beats", FileAccess.WRITE)
+	var array_as_string = ""
+	for beat in beat_array:
+		array_as_string = array_as_string + str(beat) + "\n"
+	file.store_string(array_as_string)
+	
+	
 
 # add a beat to the track
 func add_beat(rel_position):
@@ -30,6 +43,9 @@ func add_beat(rel_position):
 	beat_array.sort()
 	for stream_node in streams_node.get_children():
 		stream_node.add_beat(rel_position)
+	
+	savebeats()
+
 
 func highlight_beat(beat_rel_position):
 	highlighted_beat = beat_rel_position
@@ -45,10 +61,13 @@ func remove_beat(rel_position):
 	for stream_node in streams_node.get_children():
 		stream_node.remove_beat(rel_position)
 
+	savebeats()
+
 # Binary search for next beat
 func get_next_beat():
-	if beat_array.size() == 0 or (rel_position > beat_array[-1]):
+	if beat_array.size() == 0 or (rel_position >= beat_array[-1]):
 		return null
+	
 	return beat_array[beat_array.bsearch(rel_position, false)]
 	
 func get_beat_ids_in_range(rel_start, rel_end):
@@ -93,7 +112,7 @@ func _process(delta):
 		if closest_next_beat:
 			var sec_remaining = audio_stream.stream.get_length() * (closest_next_beat - rel_position) 
 			if sec_remaining < .025:
-				metronome.percuss_in(sec_remaining)
+				metronome.percuss_in(max(0, sec_remaining - .004))
 
 # Set the position that we are in the song
 func set_playback_to(rel_pos):
@@ -103,27 +122,40 @@ func set_playback_to(rel_pos):
 	if audio_stream.has_stream_playback():
 		audio_stream.seek(playback_position)
 
-func _ready():
-	# Build wave instance
+func _load_tracks():
+	var path = "res://music/"
+	var dir = DirAccess.open(path)
+	dir.list_dir_begin()
+	while true:
+		var file_name = dir.get_next()
+		if file_name == "":
+			#break the while loop when get_next() returns ""
+			break
+		elif !file_name.begins_with("."): 
+			#get_next() returns a string so this can be used to load the images into an array.
+			if !file_name.ends_with(".import"):
+				sounds_array.append(file_name)
+				sounds_dict[file_name] = AudioStreamOggVorbis.load_from_file(path + file_name)
+									
+	sounds_array.sort()
+	dir.list_dir_end()
 	
+	for item in sounds_array:
+		$SelectTrack.add_item(item) # Replace with function body.
+
+func restart():
+	audio_stream.stream = sounds_dict[audio_file]
+	set_playback_to(0)
+
+func rebuild_waveform():
+
 	# load instance up with data
-	var audio_data_file = FileAccess.open('res://output.txt', FileAccess.READ)
+	var audio_data_file = FileAccess.open('res://wav.txt', FileAccess.READ)
 	var line = audio_data_file.get_line()
 	raw_audio_data = Array()
 	while line:
 		raw_audio_data.append(str_to_var(line))
 		line = audio_data_file.get_line()
-	
-	var small_raw_audio_data = []
-	var target_reduction = 8
-	for index in range(0, ceil(raw_audio_data.size() / target_reduction)):
-		var threshold = min(target_reduction, raw_audio_data.size() - index*target_reduction )
-		var app_value = 0
-		for j in range(0, threshold):
-			app_value = app_value + raw_audio_data[index*target_reduction + j] / float(threshold)
-		small_raw_audio_data.append(app_value)
-			
-	#raw_audio_data = small_raw_audio_data
 	
 	# Update data and draw
 	#CloseUpDrawArea.update_wave_data(raw_audio_data)
@@ -143,6 +175,16 @@ func _ready():
 	for stream_node in streams_node.get_children():
 		stream_node.load_data_stream(data_sources[stream_node.data_source])
 		stream_node.initialize_defaults()
+	
+	
+func _ready():
+	# Build wave instance
+	PhysicsServer2D.set_active(false)
+	PhysicsServer3D.set_active(false)
+	_load_tracks()
+	#rebuild_waveform()
+
+	
 
 func report_hover(hover_rel_position):
 	for stream_node in streams_node.get_children():
@@ -163,7 +205,25 @@ func report_annotated_press_event(press_rel_position):
 		sound_box.delete_sound()
 	if mode.is_select():
 		highlight_beat(press_rel_position)
+
+# Repeats the spacing of the last <repeat_length> beats
+func repeat_selected(repeat_length):
+	if not highlighted_beat:
+		return
+	var position = beat_array.bsearch(highlighted_beat)
+	if position < repeat_length:
+		return
 		
+	for i in range(position - 8, position):
+		var delta_to_next = beat_array[i+1] - beat_array[i]
+		# Add it
+		add_beat(highlighted_beat + delta_to_next)
+		
+		# Change the highlighted beat
+		highlighted_beat = highlighted_beat + delta_to_next 
+		
+	# Move the time
+	set_playback_to(highlighted_beat)	
 	
 func beat_focus(rel_position):
 	for stream_node in streams_node.get_children():
@@ -212,6 +272,23 @@ func slight_forward():
 	else:
 		set_playback_to(rel_position + DELTA)
 
+func report_add_tempo_event():
+	if highlighted_beat:
+		var listed_tempo = float(BPMTextEditor.text)
+		# Find distance to next beat based on tempo
+		var delta_to_next = (1 / (listed_tempo  *  (audio_stream.stream.get_length() / 60)))
+		print("Adding " + str(highlighted_beat + delta_to_next))
+		
+		# Add it
+		add_beat(highlighted_beat + delta_to_next)
+		
+		# Change the highlighted beat
+		highlighted_beat = highlighted_beat + delta_to_next 
+		
+		# Move the time
+		set_playback_to(highlighted_beat)
+		
+
 func _input(event):
 	if ! BPMTextEditor.has_focus():
 		if Input.is_key_pressed(KEY_A):
@@ -238,3 +315,20 @@ func _input(event):
 		if Input.is_key_pressed(KEY_SPACE):
 			toggle_playback()
 
+
+
+func _on_select_track_item_selected(audio_id):
+	audio_file = sounds_array[audio_id]
+	var err_id_wav = OS.execute('python3', ['audio_scripts/waveform_get.py', 'music/' + audio_file])
+	var err_id_amp = OS.execute('python3', ['audio_scripts/amplitude_get.py', 'music/' + audio_file])
+	if err_id_wav == 0 and err_id_amp == 0:
+		print("Waveform sucessfully created")
+	else:
+		print("Error encountered loading audio")
+	# Open a selected audio file
+	restart()
+	rebuild_waveform()
+
+
+func _on_select_track_focus_entered():
+	pass # Replace with function body.

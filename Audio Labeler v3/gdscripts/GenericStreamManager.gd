@@ -32,7 +32,7 @@ var markerLine = $"MarkerLine"
 @onready
 var ScrollBarObj = $"ScrollBar"
 @onready
-var mode = get_node("/root/Mode")
+var mode = get_node("/root/Master Audio Tool/mode")
 
 @export var time_window = 1.0
 @export var reflect = false
@@ -45,17 +45,18 @@ func _ready():
 	pass # Replace with function body.
 
 func draw_stream():
-	if window_type == "rolling":
-		rel_position_start = rel_position - size.x / ( 2 * data_stream.size() )
-	if window_type == "frame":
-		rel_position_start = rel_position
-	
-	rel_position_end = rel_position_start + size.x / data_stream.size()
-	focus_wave_data_start = round(rel_position_start * data_stream.size())
-	focus_wave_data_end = round(rel_position_end * data_stream.size())
-	ScrollBarObj.value = rel_position * ScrollBarObj.max_value
-	# redraw
-	streamFG.queue_redraw()
+	if data_stream.size() > 0:
+		if window_type == "rolling":
+			rel_position_start = rel_position - size.x / ( 2 * data_stream.size() )
+		if window_type == "frame":
+			rel_position_start = rel_position
+		
+		rel_position_end = rel_position_start + size.x / data_stream.size()
+		focus_wave_data_start = round(rel_position_start * data_stream.size())
+		focus_wave_data_end = round(rel_position_end * data_stream.size())
+		ScrollBarObj.value = rel_position * ScrollBarObj.max_value
+		# redraw
+		streamFG.queue_redraw()
 
 func add_beat(position):
 	var BeatMarker = Beat.new_beat(position)
@@ -70,6 +71,9 @@ func remove_beat(position):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if data_stream.size() == 0:
+		return
+
 	# If the audio position changed..
 	if audio_tool.rel_position != rel_position:
 		# ...then Get a new relative position
@@ -80,7 +84,8 @@ func _process(delta):
 			if (round(data_stream.size() * rel_position) >= focus_wave_data_end) or (round(data_stream.size() * rel_position) < focus_wave_data_start):
 				draw_stream()
 			streamBar.position.x = size.x * (round(data_stream.size() * rel_position) - focus_wave_data_start) / (focus_wave_data_end - focus_wave_data_start) - 3
-	
+
+
 	var beats_in_range = audio_tool.get_beat_ids_in_range(rel_position_start, rel_position_end)
 	if beats_in_range == null:
 		# Hide all if nothing should be displayed
@@ -111,8 +116,6 @@ func _process(delta):
 			print("setting invisible")
 			BeatMarker.set_visible(false)
 			BeatMarker.set_selected(false)
-		else:
-			break
 	
 	for beat_id in range(beats_in_range[1] + 1, audio_tool.beat_array.size()):
 		var beat_occurance =  audio_tool.beat_array[beat_id]
@@ -120,8 +123,6 @@ func _process(delta):
 		if BeatMarker.visible:
 			BeatMarker.set_visible(false)
 			BeatMarker.set_selected(false)
-		else:
-			break
 
 
 # Pass needed data onto stream:

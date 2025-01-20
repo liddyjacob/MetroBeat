@@ -12,7 +12,7 @@ func _ready():
 
 func _draw():
 	draw_set_transform(-Vector2.RIGHT * stream_manager.focus_wave_data_start)
-	
+
 	for index in range(stream_manager.focus_wave_data_start, min(stream_manager.focus_wave_data_end, stream_manager.data_stream.size())):
 		if index == 0:
 			continue

@@ -37,9 +37,6 @@ func set_selected(value: bool):
 		selected.show()
 	else:
 		selected.hide()
-	
-	
-
 
 func _on_hitbox_gui_input(event):
 	Parent.communicate_gui_input(event, relative_position)

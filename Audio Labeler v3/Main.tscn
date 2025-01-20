@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bnif78if5uie3" path="res://progress.tscn" id="1_5ejbc"]
 [ext_resource type="Script" path="res://gdscripts/Master Audio Tool.gd" id="1_gfesw"]
 [ext_resource type="Script" path="res://gdscripts/Metronome.gd" id="4_l24vc"]
-[ext_resource type="AudioStream" uid="uid://cwjw47x7t312e" path="res://music/JPEGMAFIA - I LAY DOWN MY LIFE FOR YOU - 11 either on or off the drugs.ogg" id="4_pirqm"]
 [ext_resource type="PackedScene" uid="uid://cpfglly6xkhct" path="res://play_pause.tscn" id="5_omwyd"]
 [ext_resource type="AudioStream" uid="uid://bmwh0lno3e8ro" path="res://UI Audio/metronome-85688.mp3" id="5_xpd4q"]
 [ext_resource type="Script" path="res://gdscripts/SoundBox.gd" id="8_g6ip3"]
@@ -11,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://b17v7bno8rf61" path="res://UI Audio/catching-beer-bottles_2-75028.mp3" id="9_c6ykf"]
 [ext_resource type="PackedScene" uid="uid://djwktnuuhgvk7" path="res://bpm_annotator.tscn" id="10_1ulej"]
 [ext_resource type="Script" path="res://Mode.gd" id="11_dciyt"]
+[ext_resource type="PackedScene" uid="uid://qr6kr4ktxgu3" path="res://repeater.tscn" id="12_7iuk0"]
 
 [node name="Master Audio Tool" type="Control"]
 layout_mode = 3
@@ -29,7 +29,6 @@ offset_right = -65.0
 offset_bottom = 173.0
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_pirqm")
 
 [node name="Metronome" type="Node" parent="."]
 script = ExtResource("4_l24vc")
@@ -94,3 +93,20 @@ theme_override_font_sizes/normal_font_size = 30
 theme_override_font_sizes/bold_font_size = 30
 bbcode_enabled = true
 text = "[b]ANNOTATE[/b] | select (s) | drag(d)"
+
+[node name="Repeater" parent="." instance=ExtResource("12_7iuk0")]
+layout_mode = 1
+offset_left = 956.0
+offset_top = 836.0
+offset_right = -294.0
+offset_bottom = -14.0
+
+[node name="SelectTrack" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 951.0
+offset_top = 15.0
+offset_right = 1589.0
+offset_bottom = 62.0
+
+[connection signal="focus_entered" from="SelectTrack" to="." method="_on_select_track_focus_entered"]
+[connection signal="item_selected" from="SelectTrack" to="." method="_on_select_track_item_selected"]

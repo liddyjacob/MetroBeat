@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://djwktnuuhgvk7"]
+[gd_scene load_steps=4 format=3 uid="uid://djwktnuuhgvk7"]
 
 [ext_resource type="Script" path="res://gdscripts/TextEdit.gd" id="1_6jp3d"]
 [ext_resource type="Texture2D" uid="uid://dh1xh5iyt8i41" path="res://Textures/plus.png" id="1_puqt7"]
+[ext_resource type="Script" path="res://gdscripts/bpm_annotator.gd" id="1_r0ym0"]
 
 [node name="BPMAnnotator" type="Control"]
 layout_mode = 3
@@ -12,6 +13,7 @@ offset_right = -1325.0
 offset_bottom = -825.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_r0ym0")
 
 [node name="TextEdit" type="TextEdit" parent="."]
 layout_mode = 0
@@ -23,6 +25,13 @@ text = "120"
 placeholder_text = "120"
 script = ExtResource("1_6jp3d")
 
+[node name="highlight" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 75.0
+offset_bottom = 75.0
+color = Color(0.921569, 0.6, 0.0980392, 0.180392)
+
 [node name="Add" type="TextureButton" parent="."]
 layout_mode = 0
 offset_right = 75.0
@@ -33,3 +42,6 @@ stretch_mode = 6
 
 [connection signal="mouse_entered" from="TextEdit" to="TextEdit" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="TextEdit" to="TextEdit" method="_on_mouse_exited"]
+[connection signal="gui_input" from="Add" to="." method="_on_add_gui_input"]
+[connection signal="mouse_entered" from="Add" to="." method="_on_add_mouse_entered"]
+[connection signal="mouse_exited" from="Add" to="." method="_on_add_mouse_exited"]
